@@ -2,14 +2,17 @@ var express = require('express'),
     path = require('path'),
     proxy = require('express-http-proxy'),
     url = require('url'),
+    morgan = require('morgan'),
     util = require('util');
 
 var app = express();
 
+app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Proxy to CouchDB
-var proxyMiddleware = proxy('localhost:5984', {
+var couchDbPort = 5984;
+var proxyMiddleware = proxy('localhost:' + couchDbPort, {
 });
 var proxyPathsRegex = /^\/_[a-zA-Z]+|\/notes-db/;
 app.use(function(req, res, next) {
